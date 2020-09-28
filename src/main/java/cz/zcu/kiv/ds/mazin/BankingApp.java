@@ -25,9 +25,9 @@ public class BankingApp {
             for (var pair : topology) {
                 var receiverSocket = context.socket(SocketType.PAIR);
                 var senderSocket = context.socket(SocketType.PAIR);
-                var statRecv = receiverSocket.bind(pair.getValue0());
+                var statRecv = receiverSocket.bind("tcp://" + pair.getValue0());
                 logger.info("Receiver bound to {}", pair.getValue0());
-                var statSend = senderSocket.connect(pair.getValue1());
+                var statSend = senderSocket.connect("tcp://" + pair.getValue1());
                 logger.info("Sender connected to {}", pair.getValue1());
             }
         } catch (IOException e) {
