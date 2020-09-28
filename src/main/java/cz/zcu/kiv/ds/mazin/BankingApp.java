@@ -7,10 +7,12 @@ import org.zeromq.SocketType;
 import org.zeromq.ZMQ;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 import static spark.Spark.*;
 
@@ -18,8 +20,13 @@ public class BankingApp {
     private static Logger logger = LoggerFactory.getLogger(BankingApp.class);
 
     public static void main(String[] args) {
+        Properties prop = new Properties();
+        InputStream in = BankingApp.class.getResourceAsStream("log4j.properties");
         try {
+            prop.load(in);
             var topology = loadTopology(args[0], Integer.parseInt(args[1]));
+            var ip = topology.get(0).getValue0().split(":");
+            prop.setProperty("log4j.appender.file.File", ip[0]);
             var context = ZMQ.context(1);
 
             for (var pair : topology) {
