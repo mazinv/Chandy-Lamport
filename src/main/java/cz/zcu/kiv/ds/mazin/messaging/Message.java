@@ -1,4 +1,4 @@
-package cz.zcu.kiv.ds.mazin;
+package cz.zcu.kiv.ds.mazin.messaging;
 
 public class Message {
     public MessageType type;
