@@ -12,3 +12,5 @@ target/
 
 .vagrant/
 logs
+.m2/
+192.*/
