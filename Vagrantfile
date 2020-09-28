@@ -19,5 +19,5 @@ Vagrant.configure("2") do |config|
     end
 
     config.vm.synced_folder ".", "/home/vagrant"
-    config.vm.provision "shell", path: "bootstrap.sh"
+    config.vm.provision "shell", path: "provision.sh"
 end
