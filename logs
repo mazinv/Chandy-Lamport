@@ -1,0 +1,29 @@
+28-09-2020 15:48:52 INFO  Server:408 - Started @867ms
+ted ServerConnector@4940ee3e{HTTP/1.1,[http/1.1]}{0.0.0.0:4567}
+6989f695db2d7b21ebc51; jvm 11.0.8+10-LTS
+28-09-2020 15:49:15 INFO  BankingApp:29 - Receiver bound to 192.168.50.11:3000
+28-09-2020 15:49:15 INFO  BankingApp:31 - Sender connected to 192.168.50.10:3000
+28-09-2020 15:49:15 INFO  BankingApp:29 - Receiver bound to 192.168.50.11:3001
+28-09-2020 15:49:15 INFO  BankingApp:31 - Sender connected to 192.168.50.12:3000
+28-09-2020 15:49:16 INFO  log:193 - Logging initialized @698ms to org.eclipse.jetty.util.log.Slf4jLog
+28-09-2020 15:49:16 WARN  AbstractConnector:450 - Ignoring deprecated socket close linger time
+28-09-2020 15:49:16 INFO  EmbeddedJettyServer:142 - == Spark has ignited ...
+28-09-2020 15:49:16 INFO  EmbeddedJettyServer:146 - >> Listening on 0.0.0.0:4567
+28-09-2020 15:49:16 INFO  Server:371 - jetty-9.4.z-SNAPSHOT; built: 2018-08-30T13:59:14.071Z; git: 27208684755d94a92186989f695db2d7b21ebc51; jvm 11.0.8+10-LTS
+28-09-2020 15:49:16 INFO  session:365 - DefaultSessionIdManager workerName=node0
+28-09-2020 15:49:16 INFO  session:370 - No SessionScavenger set, using defaults
+28-09-2020 15:49:16 INFO  session:149 - node0 Scavenging every 660000ms
+28-09-2020 15:49:16 INFO  AbstractConnector:292 - Started ServerConnector@35e6d309{HTTP/1.1,[http/1.1]}{0.0.0.0:4567}
+28-09-2020 15:49:16 INFO  Server:408 - Started @836ms
+28-09-2020 15:49:40 INFO  BankingApp:29 - Receiver bound to 192.168.50.12:3000
+28-09-2020 15:49:40 INFO  BankingApp:31 - Sender connected to 192.168.50.11:3001
+28-09-2020 15:49:40 INFO  log:193 - Logging initialized @598ms to org.eclipse.jetty.util.log.Slf4jLog
+28-09-2020 15:49:40 WARN  AbstractConnector:450 - Ignoring deprecated socket close linger time
+28-09-2020 15:49:40 INFO  EmbeddedJettyServer:142 - == Spark has ignited ...
+28-09-2020 15:49:40 INFO  EmbeddedJettyServer:146 - >> Listening on 0.0.0.0:4567
+28-09-2020 15:49:40 INFO  Server:371 - jetty-9.4.z-SNAPSHOT; built: 2018-08-30T13:59:14.071Z; git: 27208684755d94a92186989f695db2d7b21ebc51; jvm 11.0.8+10-LTS
+28-09-2020 15:49:40 INFO  session:365 - DefaultSessionIdManager workerName=node0
+28-09-2020 15:49:40 INFO  session:370 - No SessionScavenger set, using defaults
+28-09-2020 15:49:40 INFO  session:149 - node0 Scavenging every 660000ms
+28-09-2020 15:49:40 INFO  AbstractConnector:292 - Started ServerConnector@2dea535c{HTTP/1.1,[http/1.1]}{0.0.0.0:4567}
+28-09-2020 15:49:40 INFO  Server:408 - Started @700ms
