@@ -49,7 +49,9 @@ public class BankingApp {
                 var statSend = senderSocket.connect("tcp://" + pair.getValue1());
                 logger.info("Sender connected to {}", pair.getValue1());
 
-                var channel = new Channel(senderSocket, receiverSocket, nodeIP);
+                var otherSideIP = pair.getValue1().split(":")[0];
+
+                var channel = new Channel(senderSocket, receiverSocket, nodeIP, otherSideIP);
                 snapshotService.addChannel(channel);
 
                 new Thread(new Receiver(channel, balance, snapshotService)).start();
