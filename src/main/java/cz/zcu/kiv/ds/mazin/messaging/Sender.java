@@ -1,6 +1,7 @@
 package cz.zcu.kiv.ds.mazin.messaging;
 
 import cz.zcu.kiv.ds.mazin.Balance;
+import cz.zcu.kiv.ds.mazin.snapshot.SnapshotService;
 
 import java.util.Random;
 
@@ -8,11 +9,13 @@ public class Sender implements Runnable {
     private Channel channel;
     private Random random;
     private Balance balance;
+    private SnapshotService snapshotService;
 
-    public Sender(Channel channel, Balance balance) {
+    public Sender(Channel channel, Balance balance, SnapshotService snapshotService) {
         this.channel = channel;
         this.random = new Random();
         this.balance = balance;
+        this.snapshotService = snapshotService;
     }
 
     @Override

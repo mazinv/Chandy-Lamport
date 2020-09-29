@@ -55,8 +55,8 @@ public class BankingApp {
                 var channel = new Channel(senderSocket, receiverSocket, nodeIP);
                 snapshotService.addChannel(channel);
 
-                new Thread(new Receiver(channel, balance)).start();
-                new Thread(new Sender(channel, balance)).start();
+                new Thread(new Receiver(channel, balance, snapshotService)).start();
+                new Thread(new Sender(channel, balance, snapshotService)).start();
             }
         } catch (IOException e) {
             logger.error("Error while reading topology file {}", args[0]);

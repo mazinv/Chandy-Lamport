@@ -10,14 +10,17 @@ public class Channel {
     public ZMQ.Socket receiver;
     public String otherSideIP;
     private final Gson gson;
+    private long id;
 
     private static Logger logger = LoggerFactory.getLogger(Channel.class);
+    private static long idCounter = 0L;
 
     public Channel(ZMQ.Socket sender, ZMQ.Socket receiver, String otherSideIP) {
         this.sender = sender;
         this.receiver = receiver;
         this.otherSideIP = otherSideIP;
         this.gson = new Gson();
+        this.id = idCounter++;
     }
 
     public void send(Message message) {
@@ -32,5 +35,15 @@ public class Channel {
         logger.info("Received from {}: {}", otherSideIP, message);
 
         return message;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Channel channel = (Channel) o;
+
+        return id == channel.id;
     }
 }
