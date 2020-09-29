@@ -46,7 +46,10 @@ public class BankingApp {
                 var senderSocket = context.socket(SocketType.PAIR);
                 var statRecv = receiverSocket.bind("tcp://" + pair.getValue0());
                 logger.info("Receiver bound to {}", pair.getValue0());
-                var statSend = senderSocket.connect("tcp://" + pair.getValue1());
+                String connectString = "tcp://" + pair.getValue1();
+                var statSend = senderSocket.connect(connectString);
+                while (!statSend)
+                    statSend = senderSocket.connect(connectString);
                 logger.info("Sender connected to {}", pair.getValue1());
 
                 var otherSideIP = pair.getValue1().split(":")[0];
