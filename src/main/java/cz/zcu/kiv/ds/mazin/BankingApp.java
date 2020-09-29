@@ -14,10 +14,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static spark.Spark.*;
@@ -63,6 +60,7 @@ public class BankingApp {
         }
 
         get("/marker", (req, res) -> {
+            snapshotService.startSnapshot(UUID.randomUUID().toString(), null);
             return "Marker send";
         });
     }
