@@ -4,6 +4,8 @@ import cz.zcu.kiv.ds.mazin.messaging.Channel;
 import cz.zcu.kiv.ds.mazin.messaging.Message;
 import cz.zcu.kiv.ds.mazin.messaging.MessageType;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.*;
 
 public class SnapshotService {
@@ -33,9 +35,17 @@ public class SnapshotService {
 
     private void sendMarkers(Map<Channel, Boolean> channels, String uuid) {
         channels.forEach((channel, isEmpty) -> {
-            if (!isEmpty)
-                channel.send(new Message(MessageType.MARKER, uuid));
+            channel.send(new Message(MessageType.MARKER, uuid));
         });
+    }
+
+    private synchronized boolean checkCompletedSnapshot(Snapshot snapshot) {
+        for(var entry : snapshot.chanels.entrySet()) {
+            if(!entry.getValue()) //channel is not empty
+                return false;
+        }
+
+        return true; //all channels are empty
     }
 
     public synchronized void recordMessage(Message message, Channel channel) {
@@ -43,6 +53,16 @@ public class SnapshotService {
             if(this.snapshots.containsKey(message.data)) { //there is snapshot with this UUID -> closing channel
                 Snapshot snapshot = this.snapshots.get(message.data);
                 snapshot.chanels.put(channel, true);
+                if(this.checkCompletedSnapshot(snapshot)) {
+                    //TODO print snapshot into file
+                    try {
+                        File f = new File(this.snapshotDir + File.pathSeparator + snapshot.uuid);
+                        f.createNewFile();
+                    } catch (IOException e) {
+
+                    }
+                    snapshots.remove(snapshot);
+                }
             } else { //There is no snapshot with this UUID -> creating snapshot and closing this channel
                 this.startSnapshot(message.data, channel);
             }
