@@ -19,7 +19,7 @@ public class SnapshotService {
         this.channels = new HashSet<>();
     }
 
-    public synchronized void startSnapshot(String uuid, Channel channel) {
+    public synchronized Snapshot startSnapshot(String uuid, Channel channel) {
         Map<Channel, Boolean> channels = new HashMap<>();
         this.channels.forEach(c -> {
             if(c == channel)
@@ -31,6 +31,8 @@ public class SnapshotService {
         snapshots.put(uuid, snapshot);
 
         sendMarkers(channels, uuid);
+
+        return snapshot;
     }
 
     private void sendMarkers(Map<Channel, Boolean> channels, String uuid) {
@@ -48,23 +50,38 @@ public class SnapshotService {
         return true; //all channels are empty
     }
 
+    private synchronized void checkSnapshotsCompleteness(Snapshot snapshot) {
+        if(this.checkCompletedSnapshot(snapshot)) {
+            //TODO print snapshot into file
+            try {
+                File f = new File(this.snapshotDir + File.pathSeparator + snapshot.uuid);
+                f.createNewFile();
+            } catch (IOException e) {
+
+            }
+            snapshots.remove(snapshot);
+        }
+    }
+
     public synchronized void recordMessage(Message message, Channel channel) {
         if(message.type == MessageType.MARKER) {
+            Snapshot snapshot = null;
             if(this.snapshots.containsKey(message.data)) { //there is snapshot with this UUID -> closing channel
-                Snapshot snapshot = this.snapshots.get(message.data);
+                snapshot = this.snapshots.get(message.data);
                 snapshot.chanels.put(channel, true);
-                if(this.checkCompletedSnapshot(snapshot)) {
-                    //TODO print snapshot into file
-                    try {
-                        File f = new File(this.snapshotDir + File.pathSeparator + snapshot.uuid);
-                        f.createNewFile();
-                    } catch (IOException e) {
-
-                    }
-                    snapshots.remove(snapshot);
-                }
             } else { //There is no snapshot with this UUID -> creating snapshot and closing this channel
-                this.startSnapshot(message.data, channel);
+                snapshot = this.startSnapshot(message.data, channel);
+            }
+
+            if(this.checkCompletedSnapshot(snapshot)) {
+                //TODO print snapshot into file
+                try {
+                    File f = new File(this.snapshotDir + File.pathSeparator + snapshot.uuid);
+                    f.createNewFile();
+                } catch (IOException e) {
+
+                }
+                snapshots.remove(snapshot);
             }
         } else {
             //TODO record messages
