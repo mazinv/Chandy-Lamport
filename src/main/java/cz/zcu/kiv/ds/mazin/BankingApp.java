@@ -37,7 +37,7 @@ public class BankingApp {
             if (!snapshotDir.exists())
                 snapshotDir.mkdir();
 
-            snapshotService = new SnapshotService(nodeIP);
+            snapshotService = new SnapshotService(nodeIP, balance);
 
             var context = ZMQ.context(1);
 

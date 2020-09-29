@@ -1,10 +1,12 @@
 package cz.zcu.kiv.ds.mazin.snapshot;
 
+import cz.zcu.kiv.ds.mazin.Balance;
 import cz.zcu.kiv.ds.mazin.messaging.Channel;
 import cz.zcu.kiv.ds.mazin.messaging.Message;
 import cz.zcu.kiv.ds.mazin.messaging.MessageType;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
 
@@ -12,11 +14,13 @@ public class SnapshotService {
     private Map<String, Snapshot> snapshots;
     private String snapshotDir;
     private Set<Channel> channels;
+    private Balance balance;
 
-    public SnapshotService(String snapshotDir) {
+    public SnapshotService(String snapshotDir, Balance balance) {
         this.snapshotDir = snapshotDir;
         this.snapshots = new HashMap<>();
         this.channels = new HashSet<>();
+        this.balance = balance;
     }
 
     public synchronized Snapshot startSnapshot(String uuid, Channel channel) {
@@ -27,7 +31,7 @@ public class SnapshotService {
             else
                 channels.put(c, false); //not empty channel - if marker was created by this process
         });
-        var snapshot = new Snapshot(uuid, channels);
+        var snapshot = new Snapshot(uuid, channels, balance.getBalance());
         snapshots.put(uuid, snapshot);
 
         sendMarkers(channels, uuid);
@@ -50,19 +54,6 @@ public class SnapshotService {
         return true; //all channels are empty
     }
 
-    private synchronized void checkSnapshotsCompleteness(Snapshot snapshot) {
-        if(this.checkCompletedSnapshot(snapshot)) {
-            //TODO print snapshot into file
-            try {
-                File f = new File(this.snapshotDir + File.pathSeparator + snapshot.uuid);
-                f.createNewFile();
-            } catch (IOException e) {
-
-            }
-            snapshots.remove(snapshot);
-        }
-    }
-
     public synchronized void recordMessage(Message message, Channel channel) {
         if(message.type == MessageType.MARKER) {
             Snapshot snapshot = null;
@@ -76,8 +67,12 @@ public class SnapshotService {
             if(this.checkCompletedSnapshot(snapshot)) {
                 //TODO print snapshot into file
                 try {
-                    File f = new File(this.snapshotDir + File.pathSeparator + snapshot.uuid);
+                    File f = new File(this.snapshotDir + File.separator + snapshot.uuid);
                     f.createNewFile();
+                    FileWriter fw = new FileWriter(f);
+                    fw.write("Balance: " + snapshot.balance);
+                    fw.write(snapshot.listMessages());
+                    fw.close();
                 } catch (IOException e) {
 
                 }
@@ -87,6 +82,9 @@ public class SnapshotService {
             //TODO record messages
             if(this.snapshots.isEmpty())
                 return;
+            for(var entry : snapshots.entrySet()) {
+                entry.getValue().addMessage(message);
+            }
         }
     }
 
