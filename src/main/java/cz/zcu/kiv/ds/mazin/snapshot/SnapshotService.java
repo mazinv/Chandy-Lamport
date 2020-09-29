@@ -83,7 +83,8 @@ public class SnapshotService {
             if(this.snapshots.isEmpty())
                 return;
             for(var entry : snapshots.entrySet()) {
-                entry.getValue().addMessage(message);
+                if(!entry.getValue().chanels.get(channel))
+                    entry.getValue().addMessage(message);
             }
         }
     }
