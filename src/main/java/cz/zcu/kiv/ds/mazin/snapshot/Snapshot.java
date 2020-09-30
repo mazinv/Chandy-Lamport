@@ -29,14 +29,15 @@ public class Snapshot {
         StringBuilder sb = new StringBuilder();
 
         this.chanels.forEach((channel, isEmpty) -> {
-            sb.append("----- Channel for ")
+            sb.append("\n")
+                    .append("----- Channel for ")
                     .append(channel.otherSideIP)
-                    .append(" -----");
+                    .append(" -----")
+                    .append("\n");
 
             this.messageList.forEach(pair -> {
                 if(pair.getValue0().equals(channel))
                     sb.append(pair.getValue1());
-                sb.append("\n");
             });
         });
 

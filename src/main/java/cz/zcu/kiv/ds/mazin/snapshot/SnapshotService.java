@@ -69,7 +69,7 @@ public class SnapshotService {
                     File f = new File(this.snapshotDir + File.separator + snapshot.uuid);
                     f.createNewFile();
                     FileWriter fw = new FileWriter(f);
-                    fw.write("Balance: " + snapshot.balance + "\n\n");
+                    fw.write("Balance: " + snapshot.balance + "\n");
                     fw.write(snapshot.listMessages());
                     fw.close();
                 } catch (IOException e) {
