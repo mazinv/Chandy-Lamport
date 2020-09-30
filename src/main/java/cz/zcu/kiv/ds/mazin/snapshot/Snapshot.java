@@ -37,7 +37,8 @@ public class Snapshot {
 
             this.messageList.forEach(pair -> {
                 if(pair.getValue0().equals(channel))
-                    sb.append(pair.getValue1());
+                    sb.append(pair.getValue1())
+                            .append("\n");
             });
         });
 
