@@ -64,13 +64,12 @@ public class SnapshotService {
                 snapshot = this.startSnapshot(message.data, channel);
             }
 
-            if(this.checkCompletedSnapshot(snapshot)) {
-                //TODO print snapshot into file
+            if(this.checkCompletedSnapshot(snapshot)) { //snaphot completed -> create file
                 try {
                     File f = new File(this.snapshotDir + File.separator + snapshot.uuid);
                     f.createNewFile();
                     FileWriter fw = new FileWriter(f);
-                    fw.write("Balance: " + snapshot.balance);
+                    fw.write("Balance: " + snapshot.balance + "\n\n");
                     fw.write(snapshot.listMessages());
                     fw.close();
                 } catch (IOException e) {
@@ -78,13 +77,12 @@ public class SnapshotService {
                 }
                 snapshots.remove(snapshot);
             }
-        } else {
-            //TODO record messages
+        } else { //record msg
             if(this.snapshots.isEmpty())
                 return;
             for(var entry : snapshots.entrySet()) {
                 if(!entry.getValue().chanels.get(channel))
-                    entry.getValue().addMessage(message);
+                    entry.getValue().addMessage(message, channel);
             }
         }
     }
