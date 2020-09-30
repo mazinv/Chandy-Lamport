@@ -1,4 +1,3 @@
-rm -rf 192.168.50.10
-rm -rf 192.168.50.11
-rm -rf 192.168.50.12
+rm -rf 192.168.*
+rm -rf target
 rm logs

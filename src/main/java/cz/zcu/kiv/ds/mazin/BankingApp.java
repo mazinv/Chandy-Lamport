@@ -76,7 +76,7 @@ public class BankingApp {
         var routes = line.split(";");
 
         for(var route : routes) {
-            var ips = route.split("#");
+            var ips = route.split("->");
             var pair = new Pair<>(ips[0], ips[1]);
             result.add(pair);
         }
