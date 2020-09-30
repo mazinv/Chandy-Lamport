@@ -48,8 +48,6 @@ public class BankingApp {
                 logger.info("Receiver bound to {}", pair.getValue0());
                 String connectString = "tcp://" + pair.getValue1();
                 var statSend = senderSocket.connect(connectString);
-                while (!statSend)
-                    statSend = senderSocket.connect(connectString);
                 logger.info("Sender connected to {}", pair.getValue1());
 
                 var otherSideIP = pair.getValue1().split(":")[0];

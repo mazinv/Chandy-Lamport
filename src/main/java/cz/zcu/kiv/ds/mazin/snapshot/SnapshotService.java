@@ -39,7 +39,7 @@ public class SnapshotService {
         return snapshot;
     }
 
-    private void sendMarkers(Map<Channel, Boolean> channels, String uuid) {
+    private synchronized void sendMarkers(Map<Channel, Boolean> channels, String uuid) {
         channels.forEach((channel, isEmpty) -> {
             channel.send(new Message(MessageType.MARKER, uuid));
         });
@@ -93,7 +93,7 @@ public class SnapshotService {
         return !snapshots.isEmpty();
     }
 
-    public void addChannel(Channel channel) {
+    public synchronized void addChannel(Channel channel) {
         this.channels.add(channel);
     }
 }
