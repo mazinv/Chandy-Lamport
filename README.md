@@ -1,7 +1,5 @@
 # Chandy-Lamport - 2. semestrální práce
 
----
-
 ### Zadání
 V této práci je vytvořena síť bankovních serverů, které si mezi sebou autonomně vyměňují zprávy o vkladu nebo výběru peněz z konta. Globální stav konta musí zůstat konzistentní. Pro kontrolu globálního stavu je implementován Chandy-Lamportův algoritmus, kterým je získán globální snapshot. 
 
@@ -45,7 +43,7 @@ Požadavky na nainstalovaný SW:
 
 Ukázka uložení snapshotů je spuštěna přes skript `run.sh`. Ten zajistí přeložení programu, spuštění serverů přes program Vagrant a spuštění ukládání snapshotů na všech serverech (jsou tedy spuštěny 4 nezávyslé snapshoty). 
 
-Po rozeslání požadavků na `/marker` nedpointy serverů je třeba chvíli čekat, aby se uložily všechny snapshoty (způsobeno simulací latence).
+Po rozeslání požadavků na `/marker` endpointy serverů je třeba chvíli čekat, aby se uložily všechny snapshoty (způsobeno simulací latence).
 
 Po uložení snapshotů lze program vypnout příkazem `vagrant halt` a skriptem `cleanup.sh` vymazat soubory a složky vytvořené při běhu programů.
 
