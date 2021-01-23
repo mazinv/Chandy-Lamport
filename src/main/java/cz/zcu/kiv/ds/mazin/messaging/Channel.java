@@ -26,13 +26,13 @@ public class Channel {
     }
 
     public void send(Message message) {
-        var jsonMsg = gson.toJson(message);
+        String jsonMsg = gson.toJson(message);
         logger.info("{} --- Sending to {}: {}", thisSideIP, otherSideIP, message);
         sender.send(jsonMsg);
     }
 
     public Message receive() {
-        var jsonMsg = receiver.recvStr();
+        String jsonMsg = receiver.recvStr();
         Message message = gson.fromJson(jsonMsg, Message.class);
         logger.info("{} --- Received from {}: {}", thisSideIP, otherSideIP, message);
 

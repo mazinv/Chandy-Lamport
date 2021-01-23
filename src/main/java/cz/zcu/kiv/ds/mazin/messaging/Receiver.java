@@ -20,7 +20,7 @@ public class Receiver implements Runnable {
     @Override
     public void run() {
         while (true) {
-            var message = channel.receive();
+            Message message = channel.receive();
             switch (message.type) {
                 case CREDIT:
                     this.balance.add(Long.parseLong(message.data));

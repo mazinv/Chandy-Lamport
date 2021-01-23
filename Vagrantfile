@@ -11,9 +11,7 @@ Vagrant.configure("2") do |config|
                 subconfig.trigger.after :up do |trigger|
                     trigger.info = "starting bank"
                     trigger.run_remote = {inline: <<-SHELL
-			export JAVA_HOME=/usr/lib/jvm/jre-11-openjdk-11.0.8.10-0.el7_8.x86_64/
-			export PATH=$JAVA_HOME/bin:$PATH
-			java -jar target/bankingapp-jar-with-dependencies.jar topology.txt #{i - 1} &
+			nohup java -jar target/bankingapp-jar-with-dependencies.jar topology.txt #{i - 1} 1>log_192.168.10.#{i + 9} 2>&1 &
 		    	SHELL
 		    }
                 end

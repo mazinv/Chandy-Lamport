@@ -31,7 +31,7 @@ public class SnapshotService {
             else
                 channels.put(c, false); //not empty channel - if marker was created by this process
         });
-        var snapshot = new Snapshot(uuid, channels, balance.getBalance());
+        Snapshot snapshot = new Snapshot(uuid, channels, balance.getBalance());
         snapshots.put(uuid, snapshot);
 
         sendMarkers(channels, uuid);
@@ -46,7 +46,7 @@ public class SnapshotService {
     }
 
     private synchronized boolean checkCompletedSnapshot(Snapshot snapshot) {
-        for(var entry : snapshot.chanels.entrySet()) {
+        for(Map.Entry<Channel, Boolean> entry : snapshot.chanels.entrySet()) {
             if(!entry.getValue()) //channel is not empty
                 return false;
         }
@@ -80,7 +80,7 @@ public class SnapshotService {
         } else { //record msg
             if(this.snapshots.isEmpty())
                 return;
-            for(var entry : snapshots.entrySet()) {
+            for(Map.Entry<String, Snapshot> entry : snapshots.entrySet()) {
                 if(!entry.getValue().chanels.get(channel))
                     entry.getValue().addMessage(message, channel);
             }

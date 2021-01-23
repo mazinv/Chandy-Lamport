@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -26,12 +27,12 @@ public class BankingApp {
 
     public static void main(String[] args) {
         String[] strs = {"a", "b", "c"};
-        var set = new HashSet<String>(Arrays.asList(strs));
-        var list = set.stream().filter(s -> !s.equals("a")).collect(Collectors.toList());
+        HashSet<String> set = new HashSet<String>(Arrays.asList(strs));
+        List<String> list = set.stream().filter(s -> !s.equals("a")).collect(Collectors.toList());
 
         try {
-            var topology = loadTopology(args[0], Integer.parseInt(args[1]));
-            var nodeIP = topology.get(0).getValue0().split(":")[0];
+            List<Pair<String, String>> topology = loadTopology(args[0], Integer.parseInt(args[1]));
+            String nodeIP = topology.get(0).getValue0().split(":")[0];
 
             File snapshotDir = new File(nodeIP);
             if (!snapshotDir.exists())
@@ -39,20 +40,20 @@ public class BankingApp {
 
             snapshotService = new SnapshotService(nodeIP, balance);
 
-            var context = ZMQ.context(1);
+            ZMQ.Context context = ZMQ.context(1);
 
-            for (var pair : topology) {
-                var receiverSocket = context.socket(SocketType.PAIR);
-                var senderSocket = context.socket(SocketType.PAIR);
-                var statRecv = receiverSocket.bind("tcp://" + pair.getValue0());
+            for (Pair<String, String> pair : topology) {
+                ZMQ.Socket receiverSocket = context.socket(SocketType.PAIR);
+                ZMQ.Socket senderSocket = context.socket(SocketType.PAIR);
+                boolean statRecv = receiverSocket.bind("tcp://" + pair.getValue0());
                 logger.info("Receiver bound to {}", pair.getValue0());
                 String connectString = "tcp://" + pair.getValue1();
-                var statSend = senderSocket.connect(connectString);
+                boolean statSend = senderSocket.connect(connectString);
                 logger.info("Sender connected to {}", pair.getValue1());
 
-                var otherSideIP = pair.getValue1().split(":")[0];
+                String otherSideIP = pair.getValue1().split(":")[0];
 
-                var channel = new Channel(senderSocket, receiverSocket, nodeIP, otherSideIP);
+                Channel channel = new Channel(senderSocket, receiverSocket, nodeIP, otherSideIP);
                 snapshotService.addChannel(channel);
 
                 new Thread(new Receiver(channel, balance, snapshotService)).start();
@@ -69,15 +70,15 @@ public class BankingApp {
     }
 
     public static List<Pair<String, String>> loadTopology(String topologyFile, int nodeNumber) throws IOException {
-        var result = new ArrayList<Pair<String, String>>();
-        var lines = Files.readAllLines(Path.of(topologyFile));
-        var line = lines.get(nodeNumber);
+        List<Pair<String, String>> result = new ArrayList<>();
+        List<String> lines = Files.readAllLines(Paths.get(topologyFile));
+        String line = lines.get(nodeNumber);
 
-        var routes = line.split(";");
+        String[] routes = line.split(";");
 
-        for(var route : routes) {
-            var ips = route.split("->");
-            var pair = new Pair<>(ips[0], ips[1]);
+        for(String route : routes) {
+            String[] ips = route.split("->");
+            Pair<String, String> pair = new Pair<>(ips[0], ips[1]);
             result.add(pair);
         }
 
